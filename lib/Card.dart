@@ -1,18 +1,18 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class Pic {
+class MyCard {
   late String docId;
   late String title;
-  late String image;
-  late String description;
+  late String img;
+  late String desc;
 
 
 
   // constructor
-  Pic.fromDoc(QueryDocumentSnapshot doc) {
+  MyCard.fromDoc(QueryDocumentSnapshot doc) {
     title = doc["title"];
-    image = doc["image"];
-    description = doc["description"];
+    img = doc["img"];
+    desc = doc["desc"];
     docId = doc.id;
   }
 }

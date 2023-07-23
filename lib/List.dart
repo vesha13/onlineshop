@@ -2,14 +2,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 //import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import 'Picture.dart';
+import 'Card.dart';
 
 class ArtDetails extends StatelessWidget {
-  final Pic naruto;
+  final MyCard item;
 
-  ArtDetails(this.naruto, {Key? key}) : super(key: key);
+  ArtDetails(this.item, {Key? key}) : super(key: key);
 
-  static PageRouteBuilder getRoute(Pic naruto) {
+  static PageRouteBuilder getRoute(MyCard item) {
     return PageRouteBuilder(
         transitionsBuilder: (_, animation, secondAnimation, child) {
       return FadeTransition(
@@ -20,7 +20,7 @@ class ArtDetails extends StatelessWidget {
         ),
       );
     }, pageBuilder: (_, __, ___) {
-      return new ArtDetails(naruto);
+      return new ArtDetails(item);
     });
   }
 
@@ -28,24 +28,25 @@ class ArtDetails extends StatelessWidget {
   Widget build(BuildContext context) {
 
     return Scaffold(
-      backgroundColor: Colors.purple.shade50,
+      backgroundColor: Colors.grey.shade800,
       appBar: AppBar(
-        title: Text(naruto.title),
+        title: Text('Sneakers Shop'),
       ),
       body: Column(children: [
-
+          Center(
+            child:Text(item.title, style: TextStyle(fontSize: 34, color: const Color.fromARGB(255, 245, 255, 133)))
+            ),
           Padding(
-                      padding: const EdgeInsets.all(20.0),
+                      padding: const EdgeInsets.all(10.12),
                       child: Center(child: 
                           Image.network(
-                      width: 300,
-                      naruto.image,
+                      width: 400,
+                      item.img,
                       fit: BoxFit.cover,
                     ),) 
                     ),
-          Padding(
-             padding: const EdgeInsets.all(10.10),
-            child: Text(naruto.description, style: TextStyle(fontSize: 20, fontFamily: 'RobotoMono')))
+         
+          Text(item.desc, style: TextStyle(fontSize: 24, color: Color.fromARGB(255, 253, 246, 253)))
       ],)
     );
   }

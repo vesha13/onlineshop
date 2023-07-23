@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'PicList.dart';
+import 'List.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'Picture.dart';
+import 'Card.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
@@ -16,11 +16,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: ThemeData(
-         primarySwatch: Colors.pink,
-          colorScheme: ColorScheme.fromSwatch(
-              primarySwatch: Colors.indigo,
-              accentColor: Color.fromARGB(255, 3, 100, 61))),
+     
       home: MyArtApp(),
     );
   }
@@ -34,15 +30,15 @@ class MyArtApp extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyArtApp> {
-  List<Pic> narutoList = [];
+  List<MyCard> item = [];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Naruto Best Guys"),
+        title: Text("Sneakers Shop"),
       ),
-      body: FutureBuilder<List<Pic>>(
+      body: FutureBuilder<List<MyCard>>(
        
         /// Initialize FlutterFire:
         future: getArt(),
@@ -54,8 +50,8 @@ class _MyHomePageState extends State<MyArtApp> {
 
           /// On completion
           if (snapshot.connectionState == ConnectionState.done) {
-            narutoList = snapshot.data!;
-            return buildGrid(narutoList);
+            item = snapshot.data!;
+            return buildGrid(item);
           }
 
           /// On Loading
@@ -68,23 +64,23 @@ class _MyHomePageState extends State<MyArtApp> {
     );
   }
 
-  Future<List<Pic>> getArt() async {
-    List<Pic> cards = [];
+  Future<List<MyCard>> getArt() async {
+    List<MyCard> cards = [];
     await FirebaseFirestore.instance
-        .collection('art')
+        .collection('onlineshop')
         .get()
         .then((QuerySnapshot querySnapshot) {
       querySnapshot.docs.forEach((QueryDocumentSnapshot doc) {
-        cards.add(Pic.fromDoc(doc));
+        cards.add(MyCard.fromDoc(doc));
       });
     });
     return cards;
   }
 
-  Widget buildGrid(List<Pic> narutoList) {
+  Widget buildGrid(List<MyCard> item) {
     return RefreshIndicator(
       onRefresh: () async{
-        narutoList=[];
+        item=[];
         await getArt();
         setState(() {});
         return Future.value();
@@ -93,44 +89,44 @@ class _MyHomePageState extends State<MyArtApp> {
         
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
-            childAspectRatio: 0.6,
+            childAspectRatio: 0.7,
           ),
-          itemCount: narutoList.length,
+          itemCount: item.length,
           itemBuilder: (BuildContext context, int index) {
             return InkWell(
-              highlightColor: Colors.pink,
+              
               onTap: () {
-                Navigator.push(context, ArtDetails.getRoute(narutoList[index]));
+                Navigator.push(context, ArtDetails.getRoute(item[index]));
               },
               child: Card(
                 child: Container(
                 
-                color: Color.fromARGB(255, 183, 220, 176),
+                color: Color.fromARGB(255, 195, 182, 148),
                 child: Column(
                   
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Center(child: Text(
-                        narutoList[index].title,
-                        textAlign: TextAlign.center,
+                        item[index].title,
+                        textAlign: TextAlign.left,
                         
-                        style: TextStyle(fontSize: 20, fontFamily: 'RobotoMono'),
+                        style: TextStyle(fontSize: 22),
                       ),),
                     
                     Padding(
                       padding: const EdgeInsets.all(6.0),
                       child: Center(child: 
                           Image.network(
-                      height: 100,
-                      narutoList[index].image,
+                      width: 140,
+                      item[index].img,
                       fit: BoxFit.cover,
                     ),) 
                     ),
                     Padding(
                       padding: const EdgeInsets.all(6.0),
                       child: Text(
-                        narutoList[index].description,
-                        style: TextStyle(fontSize: 14, fontFamily: 'RobotoMono'), 
+                        item[index].desc,
+                        style: TextStyle(fontSize: 12), 
                       ),
                     ),
                   ],
