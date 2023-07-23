@@ -1,140 +1,204 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'List.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'Card.dart';
 
-void main() async{
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp().then((value) => print(value.options.projectId));
-  runApp(MyApp());
-}
+void main() => runApp(Lab1());
 
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+
+/// this is your APP Main screen configuration
+class Lab1 extends StatelessWidget {
+  Lab1({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-     
-      home: MyArtApp(),
+      home: LAb1HomePage(),
     );
   }
 }
 
-class MyArtApp extends StatefulWidget {
-  MyArtApp({Key? key}) : super(key: key);
 
-  @override
-  State<MyArtApp> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyArtApp> {
-  List<MyCard> item = [];
+// this is a template to start building a UI
+/// to start adding any UI you want change what comes after the [ body: ] tag below
+class LAb1HomePage extends StatelessWidget {
+  LAb1HomePage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xfff4f4f4),
+      /*******************--[focus here 🧐]--*******************/
       appBar: AppBar(
-        title: Text("Sneakers Shop"),
+        leading: const Icon(Icons.stars),
+        title: const Text('Lab 1'),
+        backgroundColor: Colors.teal,
+        elevation: 4,
       ),
-      body: FutureBuilder<List<MyCard>>(
-       
-        /// Initialize FlutterFire:
-        future: getArt(),
-        builder: (context, snapshot) {
-          /// if Error
-          if (snapshot.hasError) {
-            return Text('${snapshot.error}');
-          }
-
-          /// On completion
-          if (snapshot.connectionState == ConnectionState.done) {
-            item = snapshot.data!;
-            return buildGrid(item);
-          }
-
-          /// On Loading
-          return Center(
-              child: CircularProgressIndicator(
-            strokeWidth: 3,
-          ));
-        },
-      ),
+      body: myWidget(),
+      /*******************--[focus here 🧐]--*******************/
     );
   }
 
-  Future<List<MyCard>> getArt() async {
-    List<MyCard> cards = [];
-    await FirebaseFirestore.instance
-        .collection('onlineshop')
-        .get()
-        .then((QuerySnapshot querySnapshot) {
-      querySnapshot.docs.forEach((QueryDocumentSnapshot doc) {
-        cards.add(MyCard.fromDoc(doc));
-      });
-    });
-    return cards;
-  }
 
-  Widget buildGrid(List<MyCard> item) {
-    return RefreshIndicator(
-      onRefresh: () async{
-        item=[];
-        await getArt();
-        setState(() {});
-        return Future.value();
-      },
-      child: GridView.builder(
+
+  Widget myWidget() {
+    return SingleChildScrollView(
+      child: Column(
         
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            childAspectRatio: 0.7,
-          ),
-          itemCount: item.length,
-          itemBuilder: (BuildContext context, int index) {
-            return InkWell(
-              
-              onTap: () {
-                Navigator.push(context, ArtDetails.getRoute(item[index]));
-              },
-              child: Card(
-                child: Container(
-                
-                color: Color.fromARGB(255, 195, 182, 148),
-                child: Column(
-                  
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Center(child: Text(
-                        item[index].title,
-                        textAlign: TextAlign.left,
-                        
-                        style: TextStyle(fontSize: 22),
-                      ),),
-                    
-                    Padding(
-                      padding: const EdgeInsets.all(6.0),
-                      child: Center(child: 
-                          Image.network(
-                      width: 140,
-                      item[index].img,
-                      fit: BoxFit.cover,
-                    ),) 
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(6.0),
-                      child: Text(
-                        item[index].desc,
-                        style: TextStyle(fontSize: 12), 
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              ),
-            );
-          }),
+        children: [
+          /*******************--[focus here 🧐]--*******************/
+          SizedBox(height: 25,),
+          exercise1(),
+          SizedBox(height: 25,),
+          exercise2(),
+          SizedBox(height: 25,),
+          exercise3(),
+          SizedBox(height: 25,),
+          exercise4(),
+          SizedBox(height: 25,),
+          exercise5(),
+          SizedBox(height: 25,),
+          exercise6(),
+          /*******************--[focus here 🧐]--*******************/
+        ],
+      ),
     );
+  }
+
+  /// TODO: Implement Exercises below as per the handed Document
+  Widget exercise1() {
+    return Container(
+        alignment: Alignment.topLeft,
+        padding: EdgeInsets.all(20),
+        child:
+        /*******************--[focus here 🧐]--*******************/
+        const Text("Welcome to lab1",
+          textAlign: TextAlign.left, 
+          style: TextStyle(
+            fontSize: 32, fontFamily: "monospace", 
+            color: Color.fromARGB(255, 11, 235, 213),
+            backgroundColor: Colors.grey,
+            fontStyle: FontStyle.italic
+            ),
+        ),
+    );
+
+  }
+
+  Widget exercise2() {
+    return const Icon(
+      Icons.share,
+      size: 120,
+      color: Colors.blue,
+    );
+  }
+
+
+
+  /// TODO : print on the screen on Pressed when clicking on the button, and print on Long Pressed when long click to Button
+  Widget exercise3() {
+  return MyButton();
   }
 }
+  class MyButton extends StatefulWidget {
+  @override
+  // ignore: library_private_types_in_public_api
+  _MyButtonState createState() => _MyButtonState();
+  }
+
+  class _MyButtonState extends State<MyButton> {
+  String message = '';
+
+  void _onPressed() {
+  setState(() {
+  message = 'on Pressed';
+  });
+  print('on Pressed');
+  }
+
+  void _onLongPressed() {
+  setState(() {
+  message = 'Long Pressed';
+  });
+  print('Long Pressed');
+  }
+ @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        ElevatedButton(
+          onPressed: _onPressed,
+          onLongPress: _onLongPressed,
+          style: ElevatedButton.styleFrom(
+            elevation: 8,
+            shape: StadiumBorder(),
+             padding: EdgeInsets.symmetric(horizontal: 60, vertical: 16),
+          ),
+          child: const Text(
+            "Click here",
+            style: TextStyle(fontSize: 20, color: Colors.yellowAccent),
+          ),
+        ),
+         // Add some spacing between the button and the text
+        Text(message), // Display the message below the button
+      ],
+    );
+  }}
+
+
+
+  Widget exercise4() {
+    return ElevatedButton(
+      onPressed: () {},
+      style: ElevatedButton.styleFrom (backgroundColor:  Color.fromARGB(255, 255, 251, 251), shape: CircleBorder(), elevation: 8.0, ) ,
+    
+      child: const CircleAvatar(
+            backgroundColor: Colors.black,
+             
+              radius: 36,
+              
+              child: Icon(
+                
+                Icons.favorite,
+                color:Colors.greenAccent,
+                size: 32,
+              ),
+      ),
+    
+    );
+  }
+
+  Widget exercise5() {
+    return Center(child: OutlinedButton(
+      style: OutlinedButton.styleFrom(
+        minimumSize: const Size(200, 60),
+        foregroundColor: Color.fromARGB(255, 255, 102, 0),
+        textStyle: const TextStyle(fontSize: 26,  fontWeight: FontWeight.w500,),
+        //surfaceTintColor: Colors.orange
+        side: const BorderSide(width: 3, color: Color.fromARGB(255, 245, 193, 116))
+      ),
+    child: const Text('Button to press'),
+    onPressed: () {},
+    ),
+    );
+  }
+  Widget exercise6() {
+    return Container(
+  height: 200,
+  width: 200,
+  //color: Colors.yellow,
+  padding: const EdgeInsets.all(16.0),
+  decoration: const BoxDecoration(
+    color: Colors.yellowAccent,
+    border: Border(
+      
+      top: BorderSide(width: 7,color: Color.fromARGB(255, 22, 133, 224)),
+      left: BorderSide(width: 7,color:  Color.fromARGB(255, 79, 23, 209)),
+      right: BorderSide(width: 7,color:   Color.fromARGB(255, 79, 23, 209)),
+      bottom: BorderSide(width: 7,color: Color.fromARGB(255, 239, 23, 59)) ),
+  ),
+  child:  const Icon(
+    Icons.warning,
+    color:Colors.black,
+    size: 46,
+  ),
+);
+  }
